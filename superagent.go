@@ -1,17 +1,19 @@
 package main
 
 import (
-	"time"
-
+	"fmt"
 	"github.com/g8os/core.base"
 	"github.com/g8os/core.base/pm"
 	pmcore "github.com/g8os/core.base/pm/core"
 	"github.com/g8os/core.base/settings"
-	"github.com/g8os/core0/bootstrap"
-	_ "github.com/g8os/core0/builtin"
-	"github.com/g8os/core0/logger"
+	"github.com/g8os/coreX/bootstrap"
+	"github.com/g8os/coreX/logger"
+	"github.com/g8os/coreX/options"
 	"github.com/op/go-logging"
 	"os"
+
+	_ "github.com/g8os/core.base/builtin"
+	_ "github.com/g8os/coreX/builtin"
 )
 
 var (
@@ -24,7 +26,7 @@ func init() {
 }
 
 func main() {
-	if errors := settings.Options.Validate(); len(errors) != 0 {
+	if errors := options.Options.Validate(); len(errors) != 0 {
 		for _, err := range errors {
 			log.Errorf("Validation Error: %s\n", err)
 		}
@@ -32,27 +34,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	var options = settings.Options
+	var opt = options.Options
 
-	if err := settings.LoadSettings(options.Config()); err != nil {
-		log.Fatal(err)
-	}
-
-	if errors := settings.Settings.Validate(); len(errors) > 0 {
-		for _, err := range errors {
-			log.Errorf("%s", err)
-		}
-
-		log.Fatalf("\nConfig validation error, please fix and try again.")
-	}
-
-	if settings.Settings.Sink == nil {
-		settings.Settings.Sink = make(map[string]settings.SinkConfig)
-	}
-
-	var config = settings.Settings
-
-	pm.InitProcessManager(config.Main.MaxJobs)
+	pm.InitProcessManager(opt.MaxJobs())
 
 	//start process mgr.
 	log.Infof("Starting process manager")
@@ -75,30 +59,35 @@ func main() {
 	}
 
 	bs := bootstrap.NewBootstrap()
-	bs.Bootstrap()
+	if err := bs.Bootstrap(); err != nil {
+		log.Fatalf("Failed to bootstrap corex: %s", err)
+	}
 
-	//build list with ACs that we will poll from.
-	sinks := make(map[string]*settings.SinkClient)
-	for key, sinkCfg := range config.Sink {
-		cl, err := sinkCfg.GetClient()
-		if err != nil {
-			log.Warning("Can't reach sink %s: %s", sinkCfg.URL, err)
-			continue
-		}
+	sinkID := fmt.Sprintf("core-%d", opt.CoreID())
 
-		sinks[key] = cl
+	sinkCfg := settings.SinkConfig{
+		URL:      fmt.Sprintf("redis://%s", opt.RedisSocket()),
+		Password: opt.RedisPassword(),
+	}
+
+	cl, err := sinkCfg.GetClient(sinkID)
+	if err != nil {
+		log.Fatal("Failed to get connection to redis at %s", sinkCfg.URL)
+	}
+
+	sinks := map[string]*settings.SinkClient{
+		"main": cl,
 	}
 
 	//configure logging handlers from configurations
 	log.Infof("Configure logging")
 	logger.ConfigureLogging(sinks)
-
-	log.Infof("Setting up stats buffers")
-	if config.Stats.Redis.Enabled {
-		redis := core.NewRedisStatsBuffer(config.Stats.Redis.Address, "", 1000, time.Duration(config.Stats.Redis.FlushInterval)*time.Millisecond)
-		mgr.AddStatsFlushHandler(redis.Handler)
-	}
-
+	//
+	//log.Infof("Setting up stats buffers")
+	//if config.Stats.Redis.Enabled {
+	//	redis := core.NewRedisStatsBuffer(config.Stats.Redis.Address, "", 1000, time.Duration(config.Stats.Redis.FlushInterval)*time.Millisecond)
+	//	mgr.AddStatsFlushHandler(redis.Handler)
+	//}
 
 	//start jobs sinks.
 	core.StartSinks(pm.GetManager(), sinks)
