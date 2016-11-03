@@ -70,7 +70,7 @@ func main() {
 		Password: opt.RedisPassword(),
 	}
 
-	cl, err := core.NewSinkClient(&sinkCfg, sinkID)
+	cl, err := core.NewSinkClient(&sinkCfg, sinkID, opt.ReplyTo())
 	if err != nil {
 		log.Fatal("Failed to get connection to redis at %s", sinkCfg.URL)
 	}

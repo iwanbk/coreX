@@ -10,6 +10,7 @@ type AppOptions struct {
 	coreID        uint64
 	redisSocket   string
 	redisPassword string
+	replyTo       string
 	maxJobs       int
 }
 
@@ -23,6 +24,10 @@ func (o *AppOptions) RedisSocket() string {
 
 func (o *AppOptions) RedisPassword() string {
 	return o.redisPassword
+}
+
+func (o *AppOptions) ReplyTo() string {
+	return o.replyTo
 }
 
 func (o *AppOptions) MaxJobs() int {
@@ -50,6 +55,7 @@ func init() {
 	flag.Uint64Var(&Options.coreID, "core-id", 0, "Core ID")
 	flag.StringVar(&Options.redisSocket, "redis-socket", "", "Path to the redis socket")
 	flag.StringVar(&Options.redisPassword, "redis-password", "", "Redis password [optional]")
+	flag.StringVar(&Options.replyTo, "reply-to", "corex:results", "Reply to queue")
 	flag.IntVar(&Options.maxJobs, "max-jobs", 100, "Max number of jobs that can run concurrently")
 
 	flag.Parse()
