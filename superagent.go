@@ -70,18 +70,18 @@ func main() {
 		Password: opt.RedisPassword(),
 	}
 
-	cl, err := sinkCfg.GetClient(sinkID)
+	cl, err := core.NewSinkClient(&sinkCfg, sinkID)
 	if err != nil {
 		log.Fatal("Failed to get connection to redis at %s", sinkCfg.URL)
 	}
 
-	sinks := map[string]*settings.SinkClient{
+	sinks := map[string]core.SinkClient{
 		"main": cl,
 	}
 
 	//configure logging handlers from configurations
 	log.Infof("Configure logging")
-	logger.ConfigureLogging(sinks)
+	logger.ConfigureLogging()
 	//
 	//log.Infof("Setting up stats buffers")
 	//if config.Stats.Redis.Enabled {
