@@ -63,7 +63,7 @@ func main() {
 		log.Fatalf("Failed to bootstrap corex: %s", err)
 	}
 
-	sinkID := fmt.Sprintf("core-%d", opt.CoreID())
+	sinkID := fmt.Sprintf("%d", opt.CoreID())
 
 	sinkCfg := settings.SinkConfig{
 		URL:      fmt.Sprintf("redis://%s", opt.RedisSocket()),
