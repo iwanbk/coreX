@@ -17,39 +17,43 @@
 		},
 		{
 			"ImportPath": "github.com/g8os/core.base",
-			"Rev": "c20cad96eb1b8e20c60e8d5d46545d6d38980a92"
+			"Rev": "ecdf49d4a0116114056282d0d0f9e04ccd1c2136"
 		},
 		{
 			"ImportPath": "github.com/g8os/core.base/builtin",
-			"Rev": "c20cad96eb1b8e20c60e8d5d46545d6d38980a92"
+			"Rev": "ecdf49d4a0116114056282d0d0f9e04ccd1c2136"
+		},
+		{
+			"ImportPath": "github.com/g8os/core.base/logger",
+			"Rev": "ecdf49d4a0116114056282d0d0f9e04ccd1c2136"
 		},
 		{
 			"ImportPath": "github.com/g8os/core.base/pm",
-			"Rev": "c20cad96eb1b8e20c60e8d5d46545d6d38980a92"
+			"Rev": "ecdf49d4a0116114056282d0d0f9e04ccd1c2136"
 		},
 		{
 			"ImportPath": "github.com/g8os/core.base/pm/core",
-			"Rev": "c20cad96eb1b8e20c60e8d5d46545d6d38980a92"
+			"Rev": "ecdf49d4a0116114056282d0d0f9e04ccd1c2136"
 		},
 		{
 			"ImportPath": "github.com/g8os/core.base/pm/process",
-			"Rev": "c20cad96eb1b8e20c60e8d5d46545d6d38980a92"
+			"Rev": "ecdf49d4a0116114056282d0d0f9e04ccd1c2136"
 		},
 		{
 			"ImportPath": "github.com/g8os/core.base/pm/stream",
-			"Rev": "c20cad96eb1b8e20c60e8d5d46545d6d38980a92"
+			"Rev": "ecdf49d4a0116114056282d0d0f9e04ccd1c2136"
 		},
 		{
 			"ImportPath": "github.com/g8os/core.base/settings",
-			"Rev": "c20cad96eb1b8e20c60e8d5d46545d6d38980a92"
+			"Rev": "ecdf49d4a0116114056282d0d0f9e04ccd1c2136"
 		},
 		{
 			"ImportPath": "github.com/g8os/core.base/stats",
-			"Rev": "c20cad96eb1b8e20c60e8d5d46545d6d38980a92"
+			"Rev": "ecdf49d4a0116114056282d0d0f9e04ccd1c2136"
 		},
 		{
 			"ImportPath": "github.com/g8os/core.base/utils",
-			"Rev": "c20cad96eb1b8e20c60e8d5d46545d6d38980a92"
+			"Rev": "ecdf49d4a0116114056282d0d0f9e04ccd1c2136"
 		},
 		{
 			"ImportPath": "github.com/garyburd/redigo/internal",

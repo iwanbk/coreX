@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/g8os/core.base"
+	"github.com/g8os/core.base/logger"
 	"github.com/g8os/core.base/pm"
 	pmcore "github.com/g8os/core.base/pm/core"
 	"github.com/g8os/core.base/settings"
 	"github.com/g8os/coreX/bootstrap"
-	"github.com/g8os/coreX/logger"
 	"github.com/g8os/coreX/options"
 	"github.com/op/go-logging"
 	"os"
@@ -80,8 +80,15 @@ func main() {
 	}
 
 	//configure logging handlers from configurations
+	settings.Settings.Logging = map[string]settings.Logger{
+		"redis": settings.Logger{
+			Type:    "redis",
+			Levels:  []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11},
+			Address: opt.RedisSocket(),
+		},
+	}
 	log.Infof("Configure logging")
-	logger.ConfigureLogging()
+	logger.ConfigureLogging(opt.CoreID())
 	//
 	//log.Infof("Setting up stats buffers")
 	//if config.Stats.Redis.Enabled {
